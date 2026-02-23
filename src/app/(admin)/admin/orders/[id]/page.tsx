@@ -144,6 +144,15 @@ export default function AdminOrderDetailPage() {
   };
 
   const handleDeliveryWithPayment = async () => {
+    if (!order) return;
+
+    const shopId = order.shop?._id || (order.shop as unknown as string);
+
+    if (!shopId) {
+      alert("Shop information is missing. Cannot process delivery.");
+      return;
+    }
+
     setUpdating(true);
     try {
       // First update order status to delivered
@@ -165,7 +174,7 @@ export default function AdminOrderDetailPage() {
       setOrder(orderData.data);
 
       // If payment collected, record it
-      if (collectPayment && paymentAmount) {
+      if (collectPayment && paymentAmount && parseFloat(paymentAmount) > 0) {
         const paymentResponse = await fetch("/api/admin/payments", {
           method: "POST",
           headers: {
@@ -173,10 +182,10 @@ export default function AdminOrderDetailPage() {
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
-            shopId: order?.shop._id,
+            shopId: shopId,
             amount: parseFloat(paymentAmount),
             mode: paymentMode,
-            notes: `Payment for order #${order?.orderNumber}`,
+            notes: `Payment for order #${order.orderNumber}`,
           }),
         });
 
