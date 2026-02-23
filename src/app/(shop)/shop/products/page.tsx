@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations, useLocale } from "next-intl";
-import { Search, ShoppingCart, Plus, Minus, ChevronRight, Package, CheckCircle } from "lucide-react";
+import { Search, ShoppingCart, Plus, Minus, Package, CheckCircle } from "lucide-react";
 import ShopHeader from "@/components/shop/ShopHeader";
 import { Card, CardContent, Input, Button, Badge } from "@/components/ui";
 import { useCartStore } from "@/store/cart";
@@ -68,15 +68,13 @@ export default function ProductsPage() {
     return item?.quantity || 0;
   };
 
-  const handleAddToCart = (product: Product, e: React.MouseEvent) => {
-    e.stopPropagation();
+  const handleAddToCart = (product: Product) => {
     addItem(product, 1); // Always add 1 initially
     setAddedProduct(getProductName(product));
     setTimeout(() => setAddedProduct(null), 2000);
   };
 
-  const handleUpdateQuantity = (productId: string, change: number, e: React.MouseEvent) => {
-    e.stopPropagation();
+  const handleUpdateQuantity = (productId: string, change: number) => {
     const currentQty = getCartQuantity(productId);
     const newQty = currentQty + change;
     if (newQty >= 0) {
@@ -195,19 +193,17 @@ export default function ProductsPage() {
                 return (
                   <Card
                     key={product._id}
-                    className="product-card cursor-pointer overflow-hidden shadow-md animate-fadeIn"
+                    className="product-card overflow-hidden shadow-md animate-fadeIn"
                     style={{ animationDelay: `${index * 0.05}s` }}
-                    onClick={() => router.push(`/shop/products/${product._id}`)}
                   >
                     <CardContent className="p-4">
                       <div className="flex items-start gap-4">
                         {/* Product Info */}
                         <div className="flex-1 min-w-0">
                           <div className="flex items-start justify-between mb-2">
-                            <h3 className="font-bold text-lg text-[var(--foreground)] truncate pr-2">
+                            <h3 className="font-bold text-lg text-[var(--foreground)] pr-2">
                               {getProductName(product)}
                             </h3>
-                            <ChevronRight className="w-5 h-5 text-[var(--muted-foreground)] flex-shrink-0" />
                           </div>
 
                           <div className="flex items-baseline gap-2 mb-3">
@@ -228,11 +224,11 @@ export default function ProductsPage() {
                         </div>
 
                         {/* Add to Cart Controls */}
-                        <div className="flex-shrink-0" onClick={(e) => e.stopPropagation()}>
+                        <div className="flex-shrink-0">
                           {isInCart ? (
                             <div className="flex flex-col items-center gap-2 bg-[var(--primary)] rounded-xl p-2">
                               <button
-                                onClick={(e) => handleUpdateQuantity(product._id, 1, e)}
+                                onClick={() => handleUpdateQuantity(product._id, 1)}
                                 className="w-10 h-10 flex items-center justify-center rounded-lg bg-white/20 hover:bg-white/30 text-white transition-colors"
                               >
                                 <Plus className="w-5 h-5" />
@@ -241,7 +237,7 @@ export default function ProductsPage() {
                                 {cartQty}
                               </span>
                               <button
-                                onClick={(e) => handleUpdateQuantity(product._id, -1, e)}
+                                onClick={() => handleUpdateQuantity(product._id, -1)}
                                 className="w-10 h-10 flex items-center justify-center rounded-lg bg-white/20 hover:bg-white/30 text-white transition-colors"
                               >
                                 <Minus className="w-5 h-5" />
@@ -249,7 +245,7 @@ export default function ProductsPage() {
                             </div>
                           ) : (
                             <button
-                              onClick={(e) => handleAddToCart(product, e)}
+                              onClick={() => handleAddToCart(product)}
                               className="w-14 h-14 flex items-center justify-center rounded-xl bg-[var(--primary)] text-white shadow-md hover:shadow-lg transition-all active:scale-95"
                             >
                               <Plus className="w-7 h-7" />
