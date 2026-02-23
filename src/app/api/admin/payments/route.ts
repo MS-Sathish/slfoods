@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import mongoose from "mongoose";
 import connectDB from "@/lib/db/connection";
 import { Payment, Shop } from "@/lib/db/models";
 import { verifyToken } from "@/lib/auth";
@@ -97,13 +98,16 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Only set receivedBy if it's a valid ObjectId
+    const isValidObjectId = mongoose.Types.ObjectId.isValid(payload.id);
+
     const payment = await Payment.create({
       shop: shopId,
       amount,
       mode,
       reference,
       notes,
-      receivedBy: payload.id,
+      ...(isValidObjectId && { receivedBy: payload.id }),
     });
 
     // Update shop's pending balance (reduce by payment amount)

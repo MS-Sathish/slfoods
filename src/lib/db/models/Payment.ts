@@ -7,7 +7,7 @@ export interface PaymentDocument extends Document {
   mode: PaymentMode;
   reference?: string;
   notes?: string;
-  receivedBy: Types.ObjectId;
+  receivedBy?: Types.ObjectId;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -40,7 +40,6 @@ const paymentSchema = new Schema<PaymentDocument>(
     receivedBy: {
       type: Schema.Types.ObjectId,
       ref: "Admin",
-      required: true,
     },
   },
   {
