@@ -1,0 +1,63 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Gradient -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFFBEB"/>
+      <stop offset="100%" style="stop-color:#FEF3C7"/>
+    </linearGradient>
+    <linearGradient id="greenGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#15803d"/>
+      <stop offset="100%" style="stop-color:#166534"/>
+    </linearGradient>
+    <linearGradient id="orangeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#EA580C"/>
+      <stop offset="100%" style="stop-color:#C2410C"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bgGradient)"/>
+
+  <!-- Decorative circles -->
+  <circle cx="100" cy="100" r="200" fill="#15803d" opacity="0.05"/>
+  <circle cx="1100" cy="530" r="250" fill="#EA580C" opacity="0.05"/>
+
+  <!-- Main Content Container -->
+  <rect x="50" y="50" width="1100" height="530" rx="30" fill="white" opacity="0.9"/>
+
+  <!-- Left decorative bar -->
+  <rect x="50" y="50" width="15" height="530" rx="8" fill="url(#greenGradient)"/>
+
+  <!-- Logo Circle -->
+  <circle cx="200" cy="315" r="80" fill="url(#greenGradient)"/>
+  <text x="200" y="300" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="48" font-weight="bold">SL</text>
+  <text x="200" y="340" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="16">FOODS</text>
+
+  <!-- Company Name -->
+  <text x="320" y="280" fill="#15803d" font-family="Arial, sans-serif" font-size="72" font-weight="bold">Shree Laxmi</text>
+  <text x="320" y="360" fill="#15803d" font-family="Arial, sans-serif" font-size="72" font-weight="bold">Foods</text>
+
+  <!-- Tagline -->
+  <text x="320" y="420" fill="#EA580C" font-family="Arial, sans-serif" font-size="28" font-weight="600">Wholesale Snacks Partner</text>
+
+  <!-- Bottom info bar -->
+  <rect x="50" y="480" width="1100" height="100" rx="0 0 30 30" fill="url(#greenGradient)" opacity="0.1"/>
+
+  <!-- Features -->
+  <text x="150" y="530" fill="#166534" font-family="Arial, sans-serif" font-size="20" font-weight="500">B2B Orders</text>
+  <circle cx="300" cy="525" r="4" fill="#EA580C"/>
+  <text x="330" y="530" fill="#166534" font-family="Arial, sans-serif" font-size="20" font-weight="500">Easy Payments</text>
+  <circle cx="510" cy="525" r="4" fill="#EA580C"/>
+  <text x="540" y="530" fill="#166534" font-family="Arial, sans-serif" font-size="20" font-weight="500">Track Orders</text>
+  <circle cx="700" cy="525" r="4" fill="#EA580C"/>
+  <text x="730" y="530" fill="#166534" font-family="Arial, sans-serif" font-size="20" font-weight="500">Manage Shops</text>
+
+  <!-- QR Code placeholder area -->
+  <rect x="980" y="240" width="120" height="120" rx="10" fill="#f3f4f6" stroke="#d1d5db" stroke-width="2"/>
+  <text x="1040" y="310" text-anchor="middle" fill="#9ca3af" font-family="Arial, sans-serif" font-size="14">SCAN TO</text>
+  <text x="1040" y="330" text-anchor="middle" fill="#9ca3af" font-family="Arial, sans-serif" font-size="14">ORDER</text>
+
+  <!-- App badge style -->
+  <rect x="980" y="380" width="120" height="40" rx="8" fill="url(#orangeGradient)"/>
+  <text x="1040" y="407" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="14" font-weight="600">Install App</text>
+</svg>
