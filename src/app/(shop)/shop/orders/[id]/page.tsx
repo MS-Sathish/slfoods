@@ -126,8 +126,11 @@ export default function OrderDetailsPage() {
     <div className="min-h-screen bg-[var(--background)]">
       {/* Header */}
       <header className="sticky top-0 bg-[var(--primary)] text-white z-40">
-        <div className="flex items-center gap-4 px-4 py-3">
-          <button onClick={() => router.back()}>
+        <div className="flex items-center gap-4 px-4 py-4">
+          <button
+            onClick={() => router.back()}
+            className="w-10 h-10 flex items-center justify-center rounded-full bg-white/20 hover:bg-white/30 transition-colors"
+          >
             <ArrowLeft className="w-6 h-6" />
           </button>
           <div>

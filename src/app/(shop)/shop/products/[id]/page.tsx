@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import {
   ArrowLeft,
   Plus,
@@ -17,6 +17,7 @@ import { Product } from "@/types";
 
 export default function ProductDetailPage() {
   const t = useTranslations();
+  const locale = useLocale();
   const router = useRouter();
   const params = useParams();
   const productId = params.id as string;
@@ -28,6 +29,15 @@ export default function ProductDetailPage() {
   const [quantity, setQuantity] = useState(1);
   const [showAdded, setShowAdded] = useState(false);
 
+  // Get product name based on current locale
+  const getProductName = () => {
+    if (!product) return "";
+    if (locale === "ta" && product.nameTamil) {
+      return product.nameTamil;
+    }
+    return product.name;
+  };
+
   useEffect(() => {
     fetchProduct();
   }, [productId]);
@@ -38,7 +48,7 @@ export default function ProductDetailPage() {
       const data = await response.json();
       if (data.success) {
         setProduct(data.data);
-        setQuantity(data.data.defaultQuantity || 1);
+        setQuantity(1); // Always start with 1
       }
     } catch (error) {
       console.error("Failed to fetch product:", error);
@@ -144,11 +154,16 @@ export default function ProductDetailPage() {
 
             {/* Product Name */}
             <h2 className="text-2xl font-bold text-[var(--foreground)] mb-2">
-              {product.name}
+              {getProductName()}
             </h2>
 
-            {/* Tamil Name if available */}
-            {product.nameTamil && (
+            {/* Secondary Name (show other language) */}
+            {locale === "ta" && product.name && (
+              <p className="text-lg text-[var(--muted-foreground)] mb-4">
+                {product.name}
+              </p>
+            )}
+            {locale !== "ta" && product.nameTamil && (
               <p className="text-lg text-[var(--muted-foreground)] mb-4">
                 {product.nameTamil}
               </p>

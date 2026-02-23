@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useTranslations } from "next-intl";
-import { Search, ShoppingCart, Plus, Minus, ChevronRight, Package } from "lucide-react";
+import { useTranslations, useLocale } from "next-intl";
+import { Search, ShoppingCart, Plus, Minus, ChevronRight, Package, CheckCircle } from "lucide-react";
 import ShopHeader from "@/components/shop/ShopHeader";
 import { Card, CardContent, Input, Button, Badge } from "@/components/ui";
 import { useCartStore } from "@/store/cart";
@@ -27,13 +27,23 @@ const categories: ProductCategory[] = [
 
 export default function ProductsPage() {
   const t = useTranslations();
+  const locale = useLocale();
   const router = useRouter();
   const { items, addItem, updateQuantity, getTotal } = useCartStore();
+
+  // Get product name based on current locale
+  const getProductName = (product: Product) => {
+    if (locale === "ta" && product.nameTamil) {
+      return product.nameTamil;
+    }
+    return product.name;
+  };
 
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [addedProduct, setAddedProduct] = useState<string | null>(null);
 
   useEffect(() => {
     fetchProducts();
@@ -60,7 +70,9 @@ export default function ProductsPage() {
 
   const handleAddToCart = (product: Product, e: React.MouseEvent) => {
     e.stopPropagation();
-    addItem(product, product.defaultQuantity);
+    addItem(product, 1); // Always add 1 initially
+    setAddedProduct(getProductName(product));
+    setTimeout(() => setAddedProduct(null), 2000);
   };
 
   const handleUpdateQuantity = (productId: string, change: number, e: React.MouseEvent) => {
@@ -73,9 +85,11 @@ export default function ProductsPage() {
   };
 
   const filteredProducts = products.filter((product) => {
+    const searchLower = search.toLowerCase();
     const matchesSearch =
       search === "" ||
-      product.name.toLowerCase().includes(search.toLowerCase());
+      product.name.toLowerCase().includes(searchLower) ||
+      (product.nameTamil && product.nameTamil.includes(search));
     const matchesCategory =
       selectedCategory === "all" || product.category === selectedCategory;
     return matchesSearch && matchesCategory;
@@ -116,6 +130,14 @@ export default function ProductsPage() {
           </div>
         </div>
       </header>
+
+      {/* Added to Cart Toast */}
+      {addedProduct && (
+        <div className="fixed top-20 left-4 right-4 bg-green-600 text-white px-4 py-3 rounded-xl shadow-xl flex items-center gap-3 animate-slideUp z-50">
+          <CheckCircle className="w-5 h-5 flex-shrink-0" />
+          <span className="font-medium truncate">{addedProduct} {t("products.addedToCart")}</span>
+        </div>
+      )}
 
       <main className="pb-40">
         {/* Categories */}
@@ -183,7 +205,7 @@ export default function ProductsPage() {
                         <div className="flex-1 min-w-0">
                           <div className="flex items-start justify-between mb-2">
                             <h3 className="font-bold text-lg text-[var(--foreground)] truncate pr-2">
-                              {product.name}
+                              {getProductName(product)}
                             </h3>
                             <ChevronRight className="w-5 h-5 text-[var(--muted-foreground)] flex-shrink-0" />
                           </div>

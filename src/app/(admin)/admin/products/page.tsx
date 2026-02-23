@@ -39,10 +39,12 @@ export default function AdminProductsPage() {
   // Add product modal state
   const [showAddModal, setShowAddModal] = useState(false);
   const [newName, setNewName] = useState("");
+  const [newNameTamil, setNewNameTamil] = useState("");
   const [newRate, setNewRate] = useState("");
   const [newCategory, setNewCategory] = useState<ProductCategory>("mixture");
   const [newUnitType, setNewUnitType] = useState<"kg" | "packet" | "box">("kg");
   const [newDefaultQty, setNewDefaultQty] = useState("1");
+  const [editNameTamil, setEditNameTamil] = useState("");
 
   useEffect(() => {
     fetchProducts();
@@ -85,6 +87,7 @@ export default function AdminProductsPage() {
     setEditingProduct(product);
     setEditRate(product.rate.toString());
     setEditName(product.name);
+    setEditNameTamil(product.nameTamil || "");
     setShowEditModal(true);
   };
 
@@ -93,6 +96,7 @@ export default function AdminProductsPage() {
     setEditingProduct(null);
     setEditRate("");
     setEditName("");
+    setEditNameTamil("");
   };
 
   const saveProduct = async () => {
@@ -111,6 +115,7 @@ export default function AdminProductsPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: editName,
+          nameTamil: editNameTamil,
           rate: rate
         }),
       });
@@ -120,7 +125,7 @@ export default function AdminProductsPage() {
         setProducts((prev) =>
           prev.map((p) =>
             p._id === editingProduct._id
-              ? { ...p, name: editName, rate: rate }
+              ? { ...p, name: editName, nameTamil: editNameTamil, rate: rate }
               : p
           )
         );
@@ -138,6 +143,7 @@ export default function AdminProductsPage() {
 
   const resetAddModal = () => {
     setNewName("");
+    setNewNameTamil("");
     setNewRate("");
     setNewCategory("mixture");
     setNewUnitType("kg");
@@ -170,6 +176,7 @@ export default function AdminProductsPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: newName,
+          nameTamil: newNameTamil,
           rate: rate,
           category: newCategory,
           unitType: newUnitType,
@@ -321,12 +328,23 @@ export default function AdminProductsPage() {
             <div className="p-4 space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  {t("productName")}
+                  {t("productName")} (English)
                 </label>
                 <Input
                   value={editName}
                   onChange={(e) => setEditName(e.target.value)}
                   placeholder={t("productName")}
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  {t("productNameTamil")} (தமிழ்)
+                </label>
+                <Input
+                  value={editNameTamil}
+                  onChange={(e) => setEditNameTamil(e.target.value)}
+                  placeholder="தமிழில் பெயர்"
                 />
               </div>
 
@@ -392,12 +410,23 @@ export default function AdminProductsPage() {
             <div className="p-4 space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  {t("productName")} *
+                  {t("productName")} (English) *
                 </label>
                 <Input
                   value={newName}
                   onChange={(e) => setNewName(e.target.value)}
-                  placeholder={t("productName")}
+                  placeholder="Product name in English"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  {t("productNameTamil")} (தமிழ்)
+                </label>
+                <Input
+                  value={newNameTamil}
+                  onChange={(e) => setNewNameTamil(e.target.value)}
+                  placeholder="தமிழில் பெயர்"
                 />
               </div>
 

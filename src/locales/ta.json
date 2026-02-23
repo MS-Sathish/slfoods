@@ -27,6 +27,10 @@
     "password": "கடவுச்சொல்",
     "confirmPassword": "கடவுச்சொல் உறுதிப்படுத்து",
     "mobileNumber": "மொபைல் எண்",
+    "enterEmail": "உங்கள் மின்னஞ்சலை உள்ளிடவும்",
+    "enterMobile": "மொபைல் எண் உள்ளிடவும்",
+    "enterPassword": "கடவுச்சொல் உள்ளிடவும் (குறைந்தது 6)",
+    "enterConfirmPassword": "கடவுச்சொல்லை மீண்டும் உள்ளிடவும்",
     "welcomeBack": "வரவேற்கிறோம்!",
     "loginToContinue": "ஆர்டர் செய்ய உள்நுழையவும்",
     "noAccount": "கணக்கு இல்லையா?",
@@ -85,7 +89,13 @@
     "city": "நகரம்",
     "gstNumber": "GST எண்",
     "gstOptional": "GST எண் (விருப்பம்)",
-    "submitRegistration": "கடை பதிவு செய்"
+    "submitRegistration": "கடை பதிவு செய்",
+    "enterShopName": "உங்கள் கடை பெயரை உள்ளிடவும்",
+    "enterOwnerName": "உரிமையாளர் பெயரை உள்ளிடவும்",
+    "enterStreet": "தெரு முகவரியை உள்ளிடவும்",
+    "enterArea": "பகுதி/லோகாலிட்டி உள்ளிடவும்",
+    "enterCity": "நகரத்தை உள்ளிடவும்",
+    "enterGst": "GST எண் உள்ளிடவும் (இருந்தால்)"
   },
   "dashboard": {
     "title": "முகப்பு",
@@ -254,6 +264,7 @@
     "addNewProduct": "புதிய பொருள் சேர்",
     "editProduct": "பொருள் திருத்து",
     "productName": "பொருள் பெயர்",
+    "productNameTamil": "தமிழில் பொருள் பெயர்",
     "category": "வகை",
     "rate": "விலை",
     "unit": "அலகு",

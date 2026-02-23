@@ -264,14 +264,14 @@ export default function LoginPage() {
                     label={t("shop.shopName")}
                     value={shopName}
                     onChange={(e) => setShopName(e.target.value)}
-                    placeholder="Murugan Stores"
+                    placeholder={t("shop.enterShopName")}
                   />
 
                   <Input
                     label={t("shop.ownerName")}
                     value={ownerName}
                     onChange={(e) => setOwnerName(e.target.value)}
-                    placeholder="Murugan"
+                    placeholder={t("shop.enterOwnerName")}
                   />
 
                   <div className="grid grid-cols-2 gap-3">
@@ -280,7 +280,7 @@ export default function LoginPage() {
                       label={t("auth.email")}
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder="shop@email.com"
+                      placeholder={t("auth.enterEmail")}
                       leftIcon={<Mail className="w-4 h-4" />}
                     />
                     <Input
@@ -288,7 +288,7 @@ export default function LoginPage() {
                       label={t("auth.mobileNumber")}
                       value={mobile}
                       onChange={(e) => setMobile(e.target.value.replace(/\D/g, "").slice(0, 10))}
-                      placeholder="9876543210"
+                      placeholder={t("auth.enterMobile")}
                       leftIcon={<Phone className="w-4 h-4" />}
                     />
                   </div>
@@ -305,7 +305,7 @@ export default function LoginPage() {
                     label={t("shop.street")}
                     value={street}
                     onChange={(e) => setStreet(e.target.value)}
-                    placeholder="123, Main Road"
+                    placeholder={t("shop.enterStreet")}
                   />
 
                   <div className="grid grid-cols-2 gap-3">
@@ -313,13 +313,13 @@ export default function LoginPage() {
                       label={t("shop.area")}
                       value={area}
                       onChange={(e) => setArea(e.target.value)}
-                      placeholder="T. Nagar"
+                      placeholder={t("shop.enterArea")}
                     />
                     <Input
                       label={t("shop.city")}
                       value={city}
                       onChange={(e) => setCity(e.target.value)}
-                      placeholder="Chennai"
+                      placeholder={t("shop.enterCity")}
                     />
                   </div>
 
@@ -327,7 +327,7 @@ export default function LoginPage() {
                     label={t("shop.gstOptional")}
                     value={gstNumber}
                     onChange={(e) => setGstNumber(e.target.value)}
-                    placeholder="22AAAAA0000A1Z5"
+                    placeholder={t("shop.enterGst")}
                   />
                 </div>
 
@@ -343,7 +343,7 @@ export default function LoginPage() {
                     label={t("auth.password")}
                     value={regPassword}
                     onChange={(e) => setRegPassword(e.target.value)}
-                    placeholder="Min 6 characters"
+                    placeholder={t("auth.enterPassword")}
                   />
 
                   <Input
@@ -351,7 +351,7 @@ export default function LoginPage() {
                     label={t("auth.confirmPassword")}
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    placeholder="Confirm password"
+                    placeholder={t("auth.enterConfirmPassword")}
                   />
                 </div>
 

@@ -27,6 +27,10 @@
     "password": "Password",
     "confirmPassword": "Confirm Password",
     "mobileNumber": "Mobile Number",
+    "enterEmail": "Enter your email",
+    "enterMobile": "Enter mobile number",
+    "enterPassword": "Enter password (min 6 chars)",
+    "enterConfirmPassword": "Re-enter password",
     "welcomeBack": "Welcome Back!",
     "loginToContinue": "Login to continue ordering",
     "noAccount": "Don't have an account?",
@@ -85,7 +89,13 @@
     "city": "City",
     "gstNumber": "GST Number",
     "gstOptional": "GST Number (Optional)",
-    "submitRegistration": "Register Shop"
+    "submitRegistration": "Register Shop",
+    "enterShopName": "Enter your shop name",
+    "enterOwnerName": "Enter owner name",
+    "enterStreet": "Enter street address",
+    "enterArea": "Enter area/locality",
+    "enterCity": "Enter city",
+    "enterGst": "Enter GST number (if available)"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -254,6 +264,7 @@
     "addNewProduct": "Add New Product",
     "editProduct": "Edit Product",
     "productName": "Product Name",
+    "productNameTamil": "Product Name in Tamil",
     "category": "Category",
     "rate": "Rate",
     "unit": "Unit",

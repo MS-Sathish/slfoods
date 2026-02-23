@@ -2,19 +2,29 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { ArrowLeft, Trash2, Plus, Minus, ShoppingBag, ShoppingCart, CheckCircle } from "lucide-react";
 import ShopHeader from "@/components/shop/ShopHeader";
 import { Card, CardContent, Button, Input } from "@/components/ui";
 import { useCartStore } from "@/store/cart";
 import { useAuthStore } from "@/store/auth";
+import { Product } from "@/types";
 
 export default function CartPage() {
   const t = useTranslations();
+  const locale = useLocale();
   const router = useRouter();
   const { items, updateQuantity, removeItem, clearCart, getTotal } =
     useCartStore();
   const { shop, token } = useAuthStore();
+
+  // Get product name based on current locale
+  const getProductName = (product: Product) => {
+    if (locale === "ta" && product.nameTamil) {
+      return product.nameTamil;
+    }
+    return product.name;
+  };
 
   const [notes, setNotes] = useState("");
   const [loading, setLoading] = useState(false);
@@ -115,7 +125,7 @@ export default function CartPage() {
               <CardContent className="p-4">
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
-                    <h3 className="font-bold text-lg text-[var(--foreground)]">{item.product.name}</h3>
+                    <h3 className="font-bold text-lg text-[var(--foreground)]">{getProductName(item.product)}</h3>
                     <p className="text-[var(--primary)] font-semibold mt-1">
                       ₹{item.product.rate} / {item.product.unitType}
                     </p>
