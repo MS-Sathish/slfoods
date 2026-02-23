@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
-import { connectDB } from "@/lib/db/connect";
+import { connectDB } from "@/lib/db/connection";
 import Shop from "@/lib/db/models/Shop";
 
 const JWT_SECRET = process.env.JWT_SECRET || "lakshmi-chips-secret-key";
