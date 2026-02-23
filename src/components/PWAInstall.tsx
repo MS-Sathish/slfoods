@@ -15,6 +15,7 @@ export default function PWAInstall() {
   const [showInstallBanner, setShowInstallBanner] = useState(false);
   const [isIOS, setIsIOS] = useState(false);
   const [isStandalone, setIsStandalone] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     // Register service worker
@@ -28,6 +29,15 @@ export default function PWAInstall() {
           console.log("SW registration failed:", error);
         });
     }
+
+    // Check if mobile device (screen width < 768px or touch device)
+    const checkMobile = () => {
+      const isMobileScreen = window.innerWidth < 768;
+      const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+      setIsMobile(isMobileScreen || isTouchDevice);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
 
     // Check if already installed (standalone mode)
     const isStandaloneMode =
@@ -44,7 +54,7 @@ export default function PWAInstall() {
       e.preventDefault();
       setDeferredPrompt(e as BeforeInstallPromptEvent);
 
-      // Check if user hasn't dismissed recently
+      // Check if user hasn't dismissed recently and is mobile
       const dismissed = localStorage.getItem("pwa-install-dismissed");
       if (!dismissed) {
         setShowInstallBanner(true);
@@ -63,6 +73,7 @@ export default function PWAInstall() {
 
     return () => {
       window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+      window.removeEventListener("resize", checkMobile);
     };
   }, []);
 
@@ -90,8 +101,8 @@ export default function PWAInstall() {
     }, 7 * 24 * 60 * 60 * 1000);
   };
 
-  // Don't show if already installed
-  if (isStandalone || !showInstallBanner) return null;
+  // Don't show if already installed, not mobile, or banner dismissed
+  if (isStandalone || !showInstallBanner || !isMobile) return null;
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50 p-4 animate-slideUp">
