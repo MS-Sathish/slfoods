@@ -313,5 +313,12 @@
     "enterTempPassword": "Enter a temporary password for this shop",
     "passwordResetSuccess": "Password reset successfully!",
     "shopCanLogin": "Shop owner can now login with the temporary password."
+  },
+  "pwa": {
+    "installApp": "Install App",
+    "installDescription": "Install Shree Laxmi Foods for quick access",
+    "installNow": "Install Now",
+    "iosStep1": "Tap the Share button below",
+    "iosStep2": "Scroll down and tap \"Add to Home Screen\""
   }
 }

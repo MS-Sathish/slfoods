@@ -148,9 +148,9 @@ export default function LoginPage() {
         </div>
 
         {/* God Images with Company Name in Center */}
-        <div className="flex items-center justify-center gap-6 mb-4">
+        <div className="flex items-center justify-center gap-2 sm:gap-4 md:gap-6 mb-4">
           {/* Left Image - Perumal & Lakshmi */}
-          <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-full bg-gradient-to-br from-amber-100 to-amber-50 p-1.5 shadow-xl border-3 border-amber-400 overflow-hidden flex-shrink-0">
+          <div className="w-16 h-16 sm:w-24 sm:h-24 md:w-32 md:h-32 lg:w-40 lg:h-40 rounded-full bg-gradient-to-br from-amber-100 to-amber-50 p-1 sm:p-1.5 shadow-xl border-2 sm:border-3 border-amber-400 overflow-hidden flex-shrink-0">
             <img
               src="/images/lakshmi-perumal.jpg"
               alt="Lord Perumal & Goddess Lakshmi"
@@ -159,18 +159,18 @@ export default function LoginPage() {
           </div>
 
           {/* Center - Company Name */}
-          <div className="text-center px-3">
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-green-700 drop-shadow-sm">
+          <div className="text-center px-1 sm:px-3">
+            <h1 className="text-lg sm:text-2xl md:text-3xl lg:text-4xl font-extrabold text-green-700 drop-shadow-sm leading-tight">
               {t("common.appName")}
             </h1>
-            <p className="text-green-600 text-sm sm:text-base font-semibold mt-2">{t("common.tagline")}</p>
-            <p className="text-[var(--muted-foreground)] text-sm mt-1">
+            <p className="text-green-600 text-xs sm:text-sm md:text-base font-semibold mt-1 sm:mt-2">{t("common.tagline")}</p>
+            <p className="text-[var(--muted-foreground)] text-xs sm:text-sm mt-0.5 sm:mt-1">
               Prop: SURESH PERUMAL
             </p>
           </div>
 
           {/* Right Image - Murugan */}
-          <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-full bg-gradient-to-br from-amber-100 to-amber-50 p-1.5 shadow-xl border-3 border-amber-400 overflow-hidden flex-shrink-0">
+          <div className="w-16 h-16 sm:w-24 sm:h-24 md:w-32 md:h-32 lg:w-40 lg:h-40 rounded-full bg-gradient-to-br from-amber-100 to-amber-50 p-1 sm:p-1.5 shadow-xl border-2 sm:border-3 border-amber-400 overflow-hidden flex-shrink-0">
             <img
               src="/images/ea1c4de85f634eb02f4dae6972b915de.jpg"
               alt="Lord Murugan"
