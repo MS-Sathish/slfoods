@@ -298,7 +298,7 @@ export default function ShopDashboard() {
             </div>
 
             {/* Shop List */}
-            <div className="p-4 space-y-3 overflow-y-auto max-h-[60vh]">
+            <div className="p-4 pb-20 space-y-3 overflow-y-auto max-h-[60vh]">
               {shops.map((shopItem) => (
                 <button
                   key={shopItem._id}
