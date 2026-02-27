@@ -5,7 +5,7 @@ import { verifyToken } from "@/lib/auth";
 
 // GET /api/orders - Get orders (for shop or admin)
 export async function GET(request: NextRequest) {
-  try {
+  try { 
     await connectDB();
 
     const authHeader = request.headers.get("authorization");
