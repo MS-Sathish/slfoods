@@ -17,7 +17,8 @@
     "search": "தேடு",
     "filter": "வடிகட்டு",
     "all": "அனைத்தும்",
-    "rupee": "₹"
+    "rupee": "₹",
+    "viewDetails": "விவரங்கள் பார்"
   },
   "auth": {
     "login": "உள்நுழை",
@@ -175,10 +176,13 @@
     "orderAmount": "தொகை",
     "orderStatus": "நிலை",
     "trackOrder": "ஆர்டர் நிலை பார்க்கவும்",
+    "trackYourOrders": "உங்கள் ஆர்டர்களை கண்காணிக்கவும்",
     "noOrders": "இன்னும் ஆர்டர்கள் இல்லை",
+    "noOrdersDesc": "இங்கே காண ஒரு ஆர்டர் செய்யவும்",
     "orderNotFound": "ஆர்டர் காணப்படவில்லை",
     "orderPlaced": "ஆர்டர் வெற்றிகரமாக பதிவு!",
     "orderSubmitted": "உங்கள் ஆர்டர் சமர்ப்பிக்கப்பட்டது",
+    "orderCancelled": "இந்த ஆர்டர் ரத்து செய்யப்பட்டது",
     "currentStatus": "தற்போதைய நிலை",
     "orderItems": "ஆர்டர் பொருட்கள்",
     "viewOrders": "ஆர்டர்கள் பார்க்கவும்",
@@ -198,6 +202,7 @@
   },
   "balance": {
     "title": "என் பாக்கி தொகை",
+    "paymentHistory": "கட்டண வரலாறு பார்",
     "totalPendingDue": "மொத்த பாக்கி தொகை",
     "lastPaymentUpdated": "கடைசி கட்டணம் பதிவு",
     "totalOrdersValue": "மொத்த ஆர்டர் மதிப்பு",
@@ -212,8 +217,11 @@
   },
   "profile": {
     "title": "என் சுயவிவரம்",
+    "manageAccount": "உங்கள் கணக்கை நிர்வகிக்கவும்",
     "myDetails": "என் விவரங்கள்",
     "callAdmin": "அட்மினை அழைக்கவும்",
+    "needHelp": "அட்மினிடம் உதவி பெறு",
+    "signOutAccount": "உங்கள் கணக்கிலிருந்து வெளியேறு",
     "editProfile": "சுயவிவரத்தை திருத்து"
   },
   "nav": {

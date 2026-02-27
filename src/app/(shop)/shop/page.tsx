@@ -92,29 +92,32 @@ export default function ShopDashboard() {
     <div className="min-h-screen bg-[var(--background)]">
       {/* Hero Header */}
       <header className="hero-gradient text-white pt-6 pb-12 px-4 rounded-b-3xl shadow-lg">
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-4 flex-1 min-w-0">
-            <div className="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm flex-shrink-0">
-              <Store className="w-7 h-7" />
-            </div>
-            <div className="min-w-0 flex-1">
-              <p className="text-white/80 text-sm">{t("dashboard.welcome")}</p>
-              {hasMultipleShops ? (
-                <button
-                  onClick={() => setShowShopSwitcher(true)}
-                  className="flex items-center gap-2 group"
-                >
-                  <h1 className="text-2xl font-bold truncate max-w-[200px]">
-                    {shop?.shopName || "Shop"}
-                  </h1>
-                  <ChevronDown className="w-5 h-5 flex-shrink-0 group-hover:translate-y-0.5 transition-transform" />
-                </button>
-              ) : (
-                <h1 className="text-2xl font-bold truncate">{shop?.shopName || "Shop"}</h1>
-              )}
-            </div>
-          </div>
+        {/* Top row - Language switch */}
+        <div className="flex justify-end mb-3">
           <LanguageSwitch />
+        </div>
+
+        {/* Shop info row */}
+        <div className="flex items-center gap-3 mb-6">
+          <div className="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm flex-shrink-0">
+            <Store className="w-7 h-7" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-white/80 text-sm">{t("dashboard.welcome")}</p>
+            {hasMultipleShops ? (
+              <button
+                onClick={() => setShowShopSwitcher(true)}
+                className="flex items-center gap-2 group"
+              >
+                <h1 className="text-2xl font-bold">
+                  {shop?.shopName || "Shop"}
+                </h1>
+                <ChevronDown className="w-5 h-5 flex-shrink-0 group-hover:translate-y-0.5 transition-transform" />
+              </button>
+            ) : (
+              <h1 className="text-2xl font-bold">{shop?.shopName || "Shop"}</h1>
+            )}
+          </div>
         </div>
 
         {/* Big Order Button */}

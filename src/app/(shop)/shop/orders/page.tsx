@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { ClipboardList, ChevronRight, Package } from "lucide-react";
-import ShopHeader from "@/components/shop/ShopHeader";
+import { ClipboardList, ChevronRight, Package, ArrowLeft, Calendar } from "lucide-react";
 import { Card, CardContent, Badge } from "@/components/ui";
 import { useAuthStore } from "@/store/auth";
 import { OrderStatus } from "@/types";
@@ -27,6 +27,7 @@ interface Order {
 
 export default function OrdersPage() {
   const t = useTranslations();
+  const router = useRouter();
   const { token, shop } = useAuthStore();
 
   const [orders, setOrders] = useState<Order[]>([]);
@@ -94,75 +95,124 @@ export default function OrdersPage() {
   ];
 
   return (
-    <div>
-      <ShopHeader title={t("orders.title")} />
+    <div className="min-h-screen bg-[var(--background)]">
+      {/* Hero Header */}
+      <header className="sticky top-0 hero-gradient text-white z-40 shadow-lg">
+        <div className="px-4 py-4">
+          <div className="flex items-center gap-4 mb-3">
+            <button
+              onClick={() => router.back()}
+              className="w-10 h-10 flex items-center justify-center rounded-full bg-white/20 hover:bg-white/30 transition-colors"
+            >
+              <ArrowLeft className="w-6 h-6" />
+            </button>
+            <div>
+              <h1 className="text-xl font-bold">{t("orders.title")}</h1>
+              <p className="text-white/80 text-sm">{t("orders.trackYourOrders")}</p>
+            </div>
+          </div>
+        </div>
+      </header>
 
-      <main className="p-4">
-        {/* Filters */}
-        <div className="flex gap-2 overflow-x-auto pb-3 mb-4 scrollbar-hide">
+      {/* Filters - Sticky below header */}
+      <div className="sticky top-[72px] bg-[var(--background)] z-30 px-4 py-3 shadow-sm">
+        <div className="flex gap-2 overflow-x-auto scrollbar-hide">
           {filters.map((f) => (
             <button
               key={f.value}
               onClick={() => setFilter(f.value)}
               className={cn(
-                "px-4 py-2 rounded-full whitespace-nowrap text-sm font-medium transition-colors",
+                "px-5 py-2.5 rounded-full whitespace-nowrap text-sm font-semibold transition-all shadow-sm",
                 filter === f.value
-                  ? "bg-[var(--primary)] text-white"
-                  : "bg-white border border-[var(--border)] text-[var(--foreground)]"
+                  ? "bg-[var(--primary)] text-white shadow-md"
+                  : "bg-white text-[var(--foreground)] hover:bg-[var(--muted)]"
               )}
             >
               {f.label}
             </button>
           ))}
         </div>
+      </div>
 
+      <main className="p-4 pb-24">
         {/* Orders List */}
         {loading ? (
-          <div className="flex items-center justify-center py-12">
-            <div className="animate-spin w-8 h-8 border-4 border-[var(--primary)] border-t-transparent rounded-full" />
+          <div className="flex flex-col items-center justify-center py-16">
+            <div className="animate-spin w-12 h-12 border-4 border-[var(--primary)] border-t-transparent rounded-full mb-4" />
+            <p className="text-[var(--muted-foreground)]">{t("common.loading")}</p>
           </div>
         ) : orders.length === 0 ? (
-          <div className="text-center py-12">
-            <ClipboardList className="w-16 h-16 text-[var(--muted-foreground)] mx-auto mb-4" />
-            <h3 className="text-lg font-medium mb-2">{t("orders.noOrders")}</h3>
+          <div className="flex flex-col items-center justify-center py-16">
+            <div className="w-20 h-20 bg-[var(--muted)] rounded-full flex items-center justify-center mb-4">
+              <ClipboardList className="w-10 h-10 text-[var(--muted-foreground)]" />
+            </div>
+            <h3 className="text-xl font-semibold text-[var(--foreground)] mb-2">{t("orders.noOrders")}</h3>
+            <p className="text-[var(--muted-foreground)]">{t("orders.noOrdersDesc")}</p>
           </div>
         ) : (
           <div className="space-y-3">
-            {orders.map((order) => (
+            {orders.map((order, index) => (
               <Link key={order._id} href={`/shop/orders/${order._id}`}>
-                <Card className="hover:shadow-md transition-shadow cursor-pointer">
+                <Card
+                  className="hover:shadow-lg transition-all cursor-pointer animate-fadeIn overflow-hidden border-0 shadow-md"
+                  style={{ animationDelay: `${index * 0.05}s` }}
+                >
+                  <div className={cn(
+                    "h-1",
+                    order.status === "delivered" ? "bg-green-500" :
+                    order.status === "cancelled" ? "bg-red-500" :
+                    order.status === "pending" ? "bg-yellow-500" :
+                    "bg-blue-500"
+                  )} />
                   <CardContent className="p-4">
-                    <div className="flex items-start justify-between mb-2">
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <Package className="w-5 h-5 text-[var(--primary)]" />
-                          <span className="font-semibold">
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="flex items-center gap-3">
+                        <div className={cn(
+                          "w-12 h-12 rounded-xl flex items-center justify-center",
+                          order.status === "delivered" ? "bg-green-100" :
+                          order.status === "cancelled" ? "bg-red-100" :
+                          order.status === "pending" ? "bg-yellow-100" :
+                          "bg-blue-100"
+                        )}>
+                          <Package className={cn(
+                            "w-6 h-6",
+                            order.status === "delivered" ? "text-green-600" :
+                            order.status === "cancelled" ? "text-red-600" :
+                            order.status === "pending" ? "text-yellow-600" :
+                            "text-blue-600"
+                          )} />
+                        </div>
+                        <div>
+                          <span className="font-bold text-lg text-[var(--foreground)]">
                             #{order.orderNumber}
                           </span>
+                          <div className="flex items-center gap-1.5 text-sm text-[var(--muted-foreground)]">
+                            <Calendar className="w-3.5 h-3.5" />
+                            {formatDate(order.createdAt)}
+                          </div>
                         </div>
-                        <p className="text-sm text-[var(--muted-foreground)] mt-1">
-                          {formatDate(order.createdAt)}
-                        </p>
                       </div>
-                      <Badge className={getStatusColor(order.status)}>
+                      <Badge className={cn("font-semibold", getStatusColor(order.status))}>
                         {t(`orders.status.${order.status}`)}
                       </Badge>
                     </div>
 
-                    <div className="border-t border-[var(--border)] pt-3 mt-3">
-                      <p className="text-sm text-[var(--muted-foreground)] line-clamp-1">
-                        {order.items
-                          .map(
-                            (item) =>
-                              `${item.productName} (${item.quantity} ${item.unitType})`
-                          )
-                          .join(", ")}
-                      </p>
-                      <div className="flex items-center justify-between mt-2">
-                        <span className="font-bold text-[var(--primary)]">
-                          ₹{order.totalAmount.toLocaleString()}
-                        </span>
-                        <ChevronRight className="w-5 h-5 text-[var(--muted-foreground)]" />
+                    <p className="text-sm text-[var(--muted-foreground)] line-clamp-1 mb-3">
+                      {order.items
+                        .map(
+                          (item) =>
+                            `${item.productName} (${item.quantity} ${item.unitType})`
+                        )
+                        .join(", ")}
+                    </p>
+
+                    <div className="flex items-center justify-between pt-3 border-t border-[var(--border)]">
+                      <span className="text-2xl font-bold text-[var(--primary)]">
+                        ₹{order.totalAmount.toLocaleString()}
+                      </span>
+                      <div className="flex items-center gap-2 text-[var(--primary)] font-medium">
+                        <span className="text-sm">{t("common.viewDetails")}</span>
+                        <ChevronRight className="w-5 h-5" />
                       </div>
                     </div>
                   </CardContent>

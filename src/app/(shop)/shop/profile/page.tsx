@@ -10,8 +10,11 @@ import {
   FileText,
   LogOut,
   ChevronRight,
+  ArrowLeft,
+  Mail,
+  Store,
+  Settings,
 } from "lucide-react";
-import ShopHeader from "@/components/shop/ShopHeader";
 import { Card, CardContent, Button } from "@/components/ui";
 import { useAuthStore } from "@/store/auth";
 
@@ -48,71 +51,98 @@ export default function ProfilePage() {
   };
 
   return (
-    <div>
-      <ShopHeader title={t("profile.title")} />
+    <div className="min-h-screen bg-[var(--background)]">
+      {/* Hero Header */}
+      <header className="hero-gradient text-white pt-6 pb-24 px-4 rounded-b-3xl shadow-lg">
+        <div className="flex items-center gap-4 mb-6">
+          <button
+            onClick={() => router.back()}
+            className="w-10 h-10 flex items-center justify-center rounded-full bg-white/20 hover:bg-white/30 transition-colors"
+          >
+            <ArrowLeft className="w-6 h-6" />
+          </button>
+          <div>
+            <h1 className="text-xl font-bold">{t("profile.title")}</h1>
+            <p className="text-white/80 text-sm">{t("profile.manageAccount")}</p>
+          </div>
+        </div>
 
-      <main className="p-4 space-y-4">
-        {/* Shop Info Card */}
-        <Card className="bg-gradient-to-r from-[var(--primary)] to-[var(--primary-hover)] text-white">
-          <CardContent className="py-6">
-            <div className="flex items-center gap-4">
-              <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center">
-                <User className="w-8 h-8" />
-              </div>
-              <div>
-                <h2 className="text-xl font-bold">{shop?.shopName}</h2>
-                <p className="opacity-90">{shop?.ownerName}</p>
-              </div>
+        {/* Profile Card */}
+        <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-5">
+          <div className="flex items-center gap-4">
+            <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center">
+              <Store className="w-8 h-8" />
             </div>
-          </CardContent>
-        </Card>
+            <div className="flex-1 min-w-0">
+              <h2 className="text-xl font-bold truncate">{shop?.shopName}</h2>
+              <p className="text-white/80 truncate">{shop?.ownerName}</p>
+            </div>
+          </div>
+        </div>
+      </header>
 
-        {/* Contact Info */}
-        <Card>
-          <CardContent className="p-4">
-            <h3 className="font-semibold mb-4">{t("profile.myDetails")}</h3>
+      <main className="px-4 -mt-10 pb-24 space-y-4">
+        {/* Contact Info Card */}
+        <Card className="shadow-lg border-0 animate-fadeIn">
+          <CardContent className="p-5">
+            <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
+              <Settings className="w-5 h-5 text-[var(--primary)]" />
+              {t("profile.myDetails")}
+            </h3>
 
             <div className="space-y-4">
               {/* Mobile */}
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-[var(--muted)] rounded-full flex items-center justify-center">
-                  <Phone className="w-5 h-5 text-[var(--primary)]" />
+              <div className="flex items-center gap-4 p-3 bg-[var(--muted)]/50 rounded-xl">
+                <div className="w-12 h-12 bg-[var(--primary)]/10 rounded-xl flex items-center justify-center">
+                  <Phone className="w-6 h-6 text-[var(--primary)]" />
                 </div>
-                <div>
-                  <p className="text-sm text-[var(--muted-foreground)]">
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs text-[var(--muted-foreground)] uppercase tracking-wide">
                     {t("auth.mobileNumber")}
                   </p>
-                  <p className="font-medium">{shop?.mobile}</p>
+                  <p className="font-semibold text-lg">{shop?.mobile}</p>
+                </div>
+              </div>
+
+              {/* Email */}
+              <div className="flex items-center gap-4 p-3 bg-[var(--muted)]/50 rounded-xl">
+                <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
+                  <Mail className="w-6 h-6 text-blue-600" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs text-[var(--muted-foreground)] uppercase tracking-wide">
+                    {t("auth.email")}
+                  </p>
+                  <p className="font-semibold truncate">{shop?.email}</p>
                 </div>
               </div>
 
               {/* Address */}
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-[var(--muted)] rounded-full flex items-center justify-center">
-                  <MapPin className="w-5 h-5 text-[var(--primary)]" />
+              <div className="flex items-center gap-4 p-3 bg-[var(--muted)]/50 rounded-xl">
+                <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center">
+                  <MapPin className="w-6 h-6 text-orange-600" />
                 </div>
-                <div>
-                  <p className="text-sm text-[var(--muted-foreground)]">
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs text-[var(--muted-foreground)] uppercase tracking-wide">
                     {t("shop.address")}
                   </p>
-                  <p className="font-medium">
-                    {shop?.address.street}, {shop?.address.area},{" "}
-                    {shop?.address.city}
+                  <p className="font-semibold">
+                    {shop?.address.street}, {shop?.address.area}, {shop?.address.city}
                   </p>
                 </div>
               </div>
 
               {/* GST Number */}
               {shop?.gstNumber && (
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-[var(--muted)] rounded-full flex items-center justify-center">
-                    <FileText className="w-5 h-5 text-[var(--primary)]" />
+                <div className="flex items-center gap-4 p-3 bg-[var(--muted)]/50 rounded-xl">
+                  <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
+                    <FileText className="w-6 h-6 text-purple-600" />
                   </div>
-                  <div>
-                    <p className="text-sm text-[var(--muted-foreground)]">
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs text-[var(--muted-foreground)] uppercase tracking-wide">
                       {t("shop.gstNumber")}
                     </p>
-                    <p className="font-medium">{shop.gstNumber}</p>
+                    <p className="font-semibold">{shop.gstNumber}</p>
                   </div>
                 </div>
               )}
@@ -120,38 +150,51 @@ export default function ProfilePage() {
           </CardContent>
         </Card>
 
-        {/* Actions */}
+        {/* Call Admin Action */}
         {adminMobile && (
-          <Card>
-            <CardContent className="p-0">
-              <button
-                onClick={handleCallAdmin}
-                className="w-full flex items-center justify-between p-4 hover:bg-[var(--muted)] transition-colors"
-              >
-                <div className="flex items-center gap-3">
-                  <Phone className="w-5 h-5 text-[var(--primary)]" />
-                  <span className="font-medium">{t("profile.callAdmin")}</span>
+          <Card className="shadow-lg border-0 overflow-hidden animate-fadeIn" style={{ animationDelay: "0.1s" }}>
+            <button
+              onClick={handleCallAdmin}
+              className="w-full flex items-center justify-between p-5 hover:bg-[var(--muted)]/50 transition-colors"
+            >
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
+                  <Phone className="w-6 h-6 text-green-600" />
                 </div>
-                <ChevronRight className="w-5 h-5 text-[var(--muted-foreground)]" />
-              </button>
-            </CardContent>
+                <div className="text-left">
+                  <p className="font-semibold text-[var(--foreground)]">{t("profile.callAdmin")}</p>
+                  <p className="text-sm text-[var(--muted-foreground)]">{t("profile.needHelp")}</p>
+                </div>
+              </div>
+              <ChevronRight className="w-6 h-6 text-[var(--muted-foreground)]" />
+            </button>
           </Card>
         )}
 
-        {/* Logout */}
-        <Button
-          variant="outline"
-          className="w-full text-[var(--error)] border-[var(--error)] hover:bg-red-50"
-          onClick={handleLogout}
-        >
-          <LogOut className="w-5 h-5 mr-2" />
-          {t("auth.logout")}
-        </Button>
+        {/* Logout Button */}
+        <Card className="shadow-lg border-0 overflow-hidden animate-fadeIn" style={{ animationDelay: "0.2s" }}>
+          <button
+            onClick={handleLogout}
+            className="w-full flex items-center justify-between p-5 hover:bg-red-50 transition-colors"
+          >
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center">
+                <LogOut className="w-6 h-6 text-red-600" />
+              </div>
+              <div className="text-left">
+                <p className="font-semibold text-red-600">{t("auth.logout")}</p>
+                <p className="text-sm text-[var(--muted-foreground)]">{t("profile.signOutAccount")}</p>
+              </div>
+            </div>
+            <ChevronRight className="w-6 h-6 text-red-400" />
+          </button>
+        </Card>
 
         {/* App Info */}
-        <p className="text-center text-sm text-[var(--muted-foreground)] py-4">
-          Lakshmi Hot Chips v1.0.0
-        </p>
+        <div className="text-center py-6">
+          <p className="text-sm font-semibold text-[var(--foreground)]">Shree Laxmi Foods</p>
+          <p className="text-xs text-[var(--muted-foreground)] mt-1">v1.0.0</p>
+        </div>
       </main>
     </div>
   );

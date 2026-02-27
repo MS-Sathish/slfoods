@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { Wallet, TrendingDown, TrendingUp, Calendar } from "lucide-react";
-import ShopHeader from "@/components/shop/ShopHeader";
+import { Wallet, TrendingDown, TrendingUp, Calendar, ArrowLeft, IndianRupee, CreditCard } from "lucide-react";
 import { Card, CardContent } from "@/components/ui";
 import { useAuthStore } from "@/store/auth";
 import { cn } from "@/lib/utils/cn";
@@ -30,6 +30,7 @@ interface BalanceData {
 
 export default function BalancePage() {
   const t = useTranslations();
+  const router = useRouter();
   const { token, shop } = useAuthStore();
 
   const [data, setData] = useState<BalanceData | null>(null);
@@ -71,60 +72,88 @@ export default function BalancePage() {
 
   if (loading) {
     return (
-      <div>
-        <ShopHeader title={t("balance.title")} />
-        <div className="flex items-center justify-center py-12">
-          <div className="animate-spin w-8 h-8 border-4 border-[var(--primary)] border-t-transparent rounded-full" />
+      <div className="min-h-screen bg-[var(--background)]">
+        {/* Hero Header */}
+        <header className="hero-gradient text-white pt-6 pb-16 px-4 rounded-b-3xl shadow-lg">
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => router.back()}
+              className="w-10 h-10 flex items-center justify-center rounded-full bg-white/20 hover:bg-white/30 transition-colors"
+            >
+              <ArrowLeft className="w-6 h-6" />
+            </button>
+            <div>
+              <h1 className="text-xl font-bold">{t("balance.title")}</h1>
+              <p className="text-white/80 text-sm">{t("balance.paymentHistory")}</p>
+            </div>
+          </div>
+        </header>
+        <div className="flex items-center justify-center py-16">
+          <div className="animate-spin w-12 h-12 border-4 border-[var(--primary)] border-t-transparent rounded-full" />
         </div>
       </div>
     );
   }
 
   return (
-    <div>
-      <ShopHeader title={t("balance.title")} />
+    <div className="min-h-screen bg-[var(--background)]">
+      {/* Hero Header with Balance */}
+      <header className="hero-gradient text-white pt-6 pb-20 px-4 rounded-b-3xl shadow-lg">
+        <div className="flex items-center gap-4 mb-6">
+          <button
+            onClick={() => router.back()}
+            className="w-10 h-10 flex items-center justify-center rounded-full bg-white/20 hover:bg-white/30 transition-colors"
+          >
+            <ArrowLeft className="w-6 h-6" />
+          </button>
+          <div>
+            <h1 className="text-xl font-bold">{t("balance.title")}</h1>
+            <p className="text-white/80 text-sm">{t("balance.paymentHistory")}</p>
+          </div>
+        </div>
 
-      <main className="p-4 space-y-4">
-        {/* Pending Balance Card */}
-        <Card className="bg-gradient-to-r from-[var(--secondary)] to-red-600 text-white">
-          <CardContent className="py-6">
-            <div className="flex items-center gap-3 mb-2">
-              <Wallet className="w-6 h-6" />
-              <span className="text-sm opacity-90">
-                {t("balance.totalPendingDue")}
-              </span>
+        {/* Pending Balance Display */}
+        <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-5">
+          <div className="flex items-center gap-3 mb-2">
+            <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
+              <IndianRupee className="w-6 h-6" />
             </div>
-            <p className="text-4xl font-bold">
-              ₹{data?.pendingBalance.toLocaleString() || 0}
-            </p>
-          </CardContent>
-        </Card>
+            <span className="text-white/90">{t("balance.totalPendingDue")}</span>
+          </div>
+          <p className="text-5xl font-bold ml-15">
+            ₹{data?.pendingBalance.toLocaleString() || 0}
+          </p>
+        </div>
+      </header>
 
-        {/* Stats Grid */}
+      <main className="px-4 -mt-8 pb-24 space-y-4">
+        {/* Stats Cards */}
         <div className="grid grid-cols-2 gap-4">
-          <Card>
-            <CardContent className="py-4">
+          <Card className="shadow-lg border-0 overflow-hidden animate-fadeIn">
+            <div className="h-1.5 bg-gradient-to-r from-red-400 to-red-600" />
+            <CardContent className="p-4">
               <div className="flex items-center gap-2 mb-2">
-                <TrendingUp className="w-5 h-5 text-green-600" />
-                <span className="text-sm text-[var(--muted-foreground)]">
+                <TrendingUp className="w-5 h-5 text-red-500" />
+                <span className="text-xs text-[var(--muted-foreground)]">
                   {t("balance.totalOrdersValue")}
                 </span>
               </div>
-              <p className="text-xl font-bold text-green-600">
+              <p className="text-2xl font-bold text-red-600">
                 ₹{data?.totalOrdersValue.toLocaleString() || 0}
               </p>
             </CardContent>
           </Card>
 
-          <Card>
-            <CardContent className="py-4">
+          <Card className="shadow-lg border-0 overflow-hidden animate-fadeIn" style={{ animationDelay: "0.1s" }}>
+            <div className="h-1.5 bg-gradient-to-r from-green-400 to-green-600" />
+            <CardContent className="p-4">
               <div className="flex items-center gap-2 mb-2">
-                <TrendingDown className="w-5 h-5 text-blue-600" />
-                <span className="text-sm text-[var(--muted-foreground)]">
+                <TrendingDown className="w-5 h-5 text-green-500" />
+                <span className="text-xs text-[var(--muted-foreground)]">
                   {t("balance.totalPaid")}
                 </span>
               </div>
-              <p className="text-xl font-bold text-blue-600">
+              <p className="text-2xl font-bold text-green-600">
                 ₹{data?.totalPayments.toLocaleString() || 0}
               </p>
             </CardContent>
@@ -133,53 +162,60 @@ export default function BalancePage() {
 
         {/* Last Payment */}
         {data?.lastPayment && (
-          <Card className="bg-green-50 border border-green-200">
-            <CardContent className="py-4">
-              <div className="flex items-center gap-2 mb-2">
-                <Calendar className="w-5 h-5 text-green-600" />
-                <span className="text-sm text-green-700">
-                  {t("balance.lastPaymentUpdated")}
-                </span>
+          <Card className="shadow-lg border-0 bg-gradient-to-r from-green-50 to-emerald-50 animate-fadeIn" style={{ animationDelay: "0.2s" }}>
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
+                    <CreditCard className="w-6 h-6 text-green-600" />
+                  </div>
+                  <div>
+                    <p className="text-sm text-green-700 font-medium">{t("balance.lastPaymentUpdated")}</p>
+                    <p className="text-2xl font-bold text-green-700">
+                      ₹{data.lastPayment.amount.toLocaleString()}
+                    </p>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <p className="text-xs text-green-600">{formatDate(data.lastPayment.date)}</p>
+                  <span className="inline-block mt-1 px-2 py-0.5 bg-green-200 text-green-800 text-xs rounded-full font-medium">
+                    {data.lastPayment.mode.toUpperCase()}
+                  </span>
+                </div>
               </div>
-              <p className="text-xl font-bold text-green-700">
-                ₹{data.lastPayment.amount.toLocaleString()}
-              </p>
-              <p className="text-sm text-green-600 mt-1">
-                {formatDate(data.lastPayment.date)} ({data.lastPayment.mode.toUpperCase()})
-              </p>
             </CardContent>
           </Card>
         )}
 
         {/* Ledger */}
-        <Card>
+        <Card className="shadow-lg border-0 animate-fadeIn" style={{ animationDelay: "0.3s" }}>
           <CardContent className="p-4">
-            <h3 className="font-semibold mb-4">{t("balance.ledger")}</h3>
+            <h3 className="font-bold text-lg mb-4">{t("balance.ledger")}</h3>
 
             {data?.ledger && data.ledger.length > 0 ? (
               <div className="space-y-3">
                 {data.ledger.map((entry, index) => (
                   <div
                     key={index}
-                    className="flex items-center justify-between py-2 border-b border-[var(--border)] last:border-0"
+                    className="flex items-center justify-between py-3 border-b border-[var(--border)] last:border-0"
                   >
                     <div className="flex items-center gap-3">
                       <div
                         className={cn(
-                          "w-8 h-8 rounded-full flex items-center justify-center",
+                          "w-10 h-10 rounded-xl flex items-center justify-center",
                           entry.type === "order"
-                            ? "bg-red-100 text-red-600"
-                            : "bg-green-100 text-green-600"
+                            ? "bg-red-100"
+                            : "bg-green-100"
                         )}
                       >
                         {entry.type === "order" ? (
-                          <TrendingUp className="w-4 h-4" />
+                          <TrendingUp className="w-5 h-5 text-red-600" />
                         ) : (
-                          <TrendingDown className="w-4 h-4" />
+                          <TrendingDown className="w-5 h-5 text-green-600" />
                         )}
                       </div>
                       <div>
-                        <p className="font-medium text-sm">
+                        <p className="font-medium text-[var(--foreground)]">
                           {entry.description}
                         </p>
                         <p className="text-xs text-[var(--muted-foreground)]">
@@ -189,7 +225,7 @@ export default function BalancePage() {
                     </div>
                     <span
                       className={cn(
-                        "font-semibold",
+                        "font-bold text-lg",
                         entry.type === "order"
                           ? "text-red-600"
                           : "text-green-600"
@@ -202,9 +238,12 @@ export default function BalancePage() {
                 ))}
               </div>
             ) : (
-              <p className="text-center text-[var(--muted-foreground)] py-8">
-                {t("balance.noTransactions")}
-              </p>
+              <div className="flex flex-col items-center justify-center py-12">
+                <div className="w-16 h-16 bg-[var(--muted)] rounded-full flex items-center justify-center mb-4">
+                  <Wallet className="w-8 h-8 text-[var(--muted-foreground)]" />
+                </div>
+                <p className="text-[var(--muted-foreground)]">{t("balance.noTransactions")}</p>
+              </div>
             )}
           </CardContent>
         </Card>

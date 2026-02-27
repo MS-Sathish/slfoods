@@ -17,7 +17,8 @@
     "search": "Search",
     "filter": "Filter",
     "all": "All",
-    "rupee": "₹"
+    "rupee": "₹",
+    "viewDetails": "View Details"
   },
   "auth": {
     "login": "Login",
@@ -175,10 +176,13 @@
     "orderAmount": "Amount",
     "orderStatus": "Status",
     "trackOrder": "Track Order",
+    "trackYourOrders": "Track your orders",
     "noOrders": "No orders yet",
+    "noOrdersDesc": "Place an order to see it here",
     "orderNotFound": "Order not found",
     "orderPlaced": "Order Placed Successfully!",
     "orderSubmitted": "Your order has been submitted",
+    "orderCancelled": "This order has been cancelled",
     "currentStatus": "Current",
     "orderItems": "Order Items",
     "viewOrders": "View Orders",
@@ -198,6 +202,7 @@
   },
   "balance": {
     "title": "My Balance",
+    "paymentHistory": "View payment history",
     "totalPendingDue": "Total Pending Due",
     "lastPaymentUpdated": "Last Payment Updated",
     "totalOrdersValue": "Total Orders Value",
@@ -212,8 +217,11 @@
   },
   "profile": {
     "title": "My Profile",
+    "manageAccount": "Manage your account",
     "myDetails": "My Details",
     "callAdmin": "Call Admin",
+    "needHelp": "Get help from admin",
+    "signOutAccount": "Sign out from your account",
     "editProfile": "Edit Profile"
   },
   "nav": {
