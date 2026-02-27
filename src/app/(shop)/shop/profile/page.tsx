@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import {
@@ -18,6 +19,22 @@ export default function ProfilePage() {
   const t = useTranslations();
   const router = useRouter();
   const { shop, logout } = useAuthStore();
+  const [adminMobile, setAdminMobile] = useState("");
+
+  useEffect(() => {
+    async function fetchAdminContact() {
+      try {
+        const response = await fetch("/api/admin/contact");
+        const data = await response.json();
+        if (data.success && data.data.mobile) {
+          setAdminMobile(data.data.mobile);
+        }
+      } catch (error) {
+        console.error("Failed to fetch admin contact:", error);
+      }
+    }
+    fetchAdminContact();
+  }, []);
 
   const handleLogout = () => {
     logout();
@@ -25,7 +42,9 @@ export default function ProfilePage() {
   };
 
   const handleCallAdmin = () => {
-    window.location.href = "tel:+919876543210";
+    if (adminMobile) {
+      window.location.href = `tel:${adminMobile}`;
+    }
   };
 
   return (
@@ -102,20 +121,22 @@ export default function ProfilePage() {
         </Card>
 
         {/* Actions */}
-        <Card>
-          <CardContent className="p-0">
-            <button
-              onClick={handleCallAdmin}
-              className="w-full flex items-center justify-between p-4 hover:bg-[var(--muted)] transition-colors"
-            >
-              <div className="flex items-center gap-3">
-                <Phone className="w-5 h-5 text-[var(--primary)]" />
-                <span className="font-medium">{t("profile.callAdmin")}</span>
-              </div>
-              <ChevronRight className="w-5 h-5 text-[var(--muted-foreground)]" />
-            </button>
-          </CardContent>
-        </Card>
+        {adminMobile && (
+          <Card>
+            <CardContent className="p-0">
+              <button
+                onClick={handleCallAdmin}
+                className="w-full flex items-center justify-between p-4 hover:bg-[var(--muted)] transition-colors"
+              >
+                <div className="flex items-center gap-3">
+                  <Phone className="w-5 h-5 text-[var(--primary)]" />
+                  <span className="font-medium">{t("profile.callAdmin")}</span>
+                </div>
+                <ChevronRight className="w-5 h-5 text-[var(--muted-foreground)]" />
+              </button>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Logout */}
         <Button
