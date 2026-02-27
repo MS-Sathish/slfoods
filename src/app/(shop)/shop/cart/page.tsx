@@ -46,6 +46,7 @@ export default function CartPage() {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
+          shopId: shop?._id, // For multi-shop support
           items: items.map((item) => ({
             product: item.product._id,
             quantity: item.quantity,

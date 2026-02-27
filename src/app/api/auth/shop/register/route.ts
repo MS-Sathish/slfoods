@@ -34,13 +34,29 @@ export async function POST(request: NextRequest) {
 
     const normalizedEmail = email.toLowerCase().trim();
 
-    // Check if shop already exists with this email
-    const existingShop = await Shop.findOne({ email: normalizedEmail });
-    if (existingShop) {
-      return NextResponse.json(
-        { success: false, error: "Shop with this email already exists" },
-        { status: 400 }
+    // Check if shops already exist with this email
+    const existingShops = await Shop.find({ email: normalizedEmail }).select("+password");
+
+    // If email exists, verify password matches (for adding another shop)
+    if (existingShops.length > 0) {
+      const isMatch = await existingShops[0].comparePassword(password);
+      if (!isMatch) {
+        return NextResponse.json(
+          { success: false, error: "Email already registered. Use correct password to add another shop." },
+          { status: 400 }
+        );
+      }
+
+      // Check if a shop with the same name already exists for this user
+      const duplicateShopName = existingShops.find(
+        s => s.shopName.toLowerCase() === shopName.toLowerCase()
       );
+      if (duplicateShopName) {
+        return NextResponse.json(
+          { success: false, error: "You already have a shop with this name" },
+          { status: 400 }
+        );
+      }
     }
 
     // Create new shop

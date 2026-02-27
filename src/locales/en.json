@@ -83,6 +83,7 @@
     "shopName": "Shop Name",
     "ownerName": "Owner Name",
     "shopDetails": "Shop Details",
+    "accountDetails": "Account Details",
     "address": "Address",
     "street": "Street",
     "area": "Area",
@@ -95,7 +96,11 @@
     "enterStreet": "Enter street address",
     "enterArea": "Enter area/locality",
     "enterCity": "Enter city",
-    "enterGst": "Enter GST number (if available)"
+    "enterGst": "Enter GST number (if available)",
+    "addAnotherShop": "Add Another Shop",
+    "selectShop": "Select Shop",
+    "selectShopDesc": "Choose a shop to continue",
+    "switchShop": "Switch Shop"
   },
   "dashboard": {
     "title": "Dashboard",

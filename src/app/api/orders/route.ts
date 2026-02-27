@@ -29,13 +29,31 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const status = searchParams.get("status");
     const limit = parseInt(searchParams.get("limit") || "50");
+    const shopIdParam = searchParams.get("shopId");
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const query: any = {};
 
     // If shop owner, only show their orders
     if (payload.type === "shop") {
-      query.shop = payload.id;
+      // Get the shopId to query for
+      let targetShopId = payload.id;
+
+      // If shopId param is provided, verify ownership
+      if (shopIdParam && shopIdParam !== payload.id) {
+        const tokenShop = await Shop.findById(payload.id).select("email");
+        const requestedShop = await Shop.findById(shopIdParam).select("email");
+
+        if (!tokenShop || !requestedShop || tokenShop.email !== requestedShop.email) {
+          return NextResponse.json(
+            { success: false, error: "Access denied to this shop" },
+            { status: 403 }
+          );
+        }
+        targetShopId = shopIdParam;
+      }
+
+      query.shop = targetShopId;
     }
 
     // Filter by status if provided
@@ -84,8 +102,28 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const body = await request.json();
+    const { items, notes, deliveryAddress, preferredDeliveryDate, shopId } = body;
+
+    // Get the shop to place order for
+    let targetShopId = payload.id;
+
+    // If shopId is provided, verify ownership
+    if (shopId && shopId !== payload.id) {
+      const tokenShop = await Shop.findById(payload.id).select("email");
+      const requestedShop = await Shop.findById(shopId).select("email");
+
+      if (!tokenShop || !requestedShop || tokenShop.email !== requestedShop.email) {
+        return NextResponse.json(
+          { success: false, error: "Access denied to this shop" },
+          { status: 403 }
+        );
+      }
+      targetShopId = shopId;
+    }
+
     // Get shop details
-    const shop = await Shop.findById(payload.id);
+    const shop = await Shop.findById(targetShopId);
     if (!shop) {
       return NextResponse.json(
         { success: false, error: "Shop not found" },
@@ -99,9 +137,6 @@ export async function POST(request: NextRequest) {
         { status: 403 }
       );
     }
-
-    const body = await request.json();
-    const { items, notes, deliveryAddress, preferredDeliveryDate } = body;
 
     if (!items || items.length === 0) {
       return NextResponse.json(

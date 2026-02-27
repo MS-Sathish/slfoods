@@ -12,12 +12,15 @@ import {
   Store,
   IndianRupee,
   Clock,
+  ChevronDown,
+  Check,
+  X,
 } from "lucide-react";
 import { Card, CardContent, Button, LanguageSwitch } from "@/components/ui";
 import { Badge } from "@/components/ui";
 import { useAuthStore } from "@/store/auth";
 import { cn } from "@/lib/utils/cn";
-import { OrderStatus } from "@/types";
+import { OrderStatus, Shop } from "@/types";
 
 interface DashboardStats {
   pendingBalance: number;
@@ -28,18 +31,21 @@ interface DashboardStats {
 
 export default function ShopDashboard() {
   const t = useTranslations();
-  const shop = useAuthStore((state) => state.shop);
+  const { shop, shops, switchShop } = useAuthStore();
   const [stats, setStats] = useState<DashboardStats>({
     pendingBalance: 0,
     totalOrders: 0,
   });
   const [loading, setLoading] = useState(true);
+  const [showShopSwitcher, setShowShopSwitcher] = useState(false);
 
   useEffect(() => {
     async function fetchStats() {
+      if (!shop?._id) return;
+
       try {
         const token = useAuthStore.getState().token;
-        const response = await fetch("/api/shop/dashboard", {
+        const response = await fetch(`/api/shop/dashboard?shopId=${shop._id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -58,7 +64,14 @@ export default function ShopDashboard() {
     }
 
     fetchStats();
-  }, []);
+  }, [shop?._id]); // Refetch when shop changes
+
+  const handleSwitchShop = (newShop: Shop) => {
+    switchShop(newShop);
+    setShowShopSwitcher(false);
+    setLoading(true);
+    // Stats will be refetched via useEffect when shop changes
+  };
 
   const getStatusBadgeClass = (status?: OrderStatus) => {
     if (!status) return "bg-gray-100 text-gray-600";
@@ -73,18 +86,32 @@ export default function ShopDashboard() {
     return colors[status];
   };
 
+  const hasMultipleShops = shops.length > 1;
+
   return (
     <div className="min-h-screen bg-[var(--background)]">
       {/* Hero Header */}
       <header className="hero-gradient text-white pt-6 pb-12 px-4 rounded-b-3xl shadow-lg">
         <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-4">
-            <div className="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
+          <div className="flex items-center gap-4 flex-1 min-w-0">
+            <div className="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm flex-shrink-0">
               <Store className="w-7 h-7" />
             </div>
-            <div>
+            <div className="min-w-0 flex-1">
               <p className="text-white/80 text-sm">{t("dashboard.welcome")}</p>
-              <h1 className="text-2xl font-bold">{shop?.shopName || "Shop"}</h1>
+              {hasMultipleShops ? (
+                <button
+                  onClick={() => setShowShopSwitcher(true)}
+                  className="flex items-center gap-2 group"
+                >
+                  <h1 className="text-2xl font-bold truncate max-w-[200px]">
+                    {shop?.shopName || "Shop"}
+                  </h1>
+                  <ChevronDown className="w-5 h-5 flex-shrink-0 group-hover:translate-y-0.5 transition-transform" />
+                </button>
+              ) : (
+                <h1 className="text-2xl font-bold truncate">{shop?.shopName || "Shop"}</h1>
+              )}
             </div>
           </div>
           <LanguageSwitch />
@@ -252,6 +279,69 @@ export default function ShopDashboard() {
           </div>
         </div>
       </main>
+
+      {/* Shop Switcher Modal */}
+      {showShopSwitcher && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-end sm:items-center justify-center">
+          <div className="bg-white w-full sm:max-w-md sm:rounded-2xl rounded-t-2xl max-h-[80vh] overflow-hidden animate-slideUp">
+            {/* Header */}
+            <div className="flex items-center justify-between p-4 border-b border-[var(--border)]">
+              <h2 className="text-lg font-bold text-[var(--foreground)]">
+                {t("shop.switchShop")}
+              </h2>
+              <button
+                onClick={() => setShowShopSwitcher(false)}
+                className="p-2 hover:bg-[var(--muted)] rounded-full transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Shop List */}
+            <div className="p-4 space-y-3 overflow-y-auto max-h-[60vh]">
+              {shops.map((shopItem) => (
+                <button
+                  key={shopItem._id}
+                  onClick={() => handleSwitchShop(shopItem)}
+                  className={cn(
+                    "w-full p-4 rounded-xl border-2 transition-all text-left flex items-center gap-4",
+                    shop?._id === shopItem._id
+                      ? "border-[var(--primary)] bg-[var(--primary)]/5"
+                      : "border-[var(--border)] hover:border-[var(--primary)]/50"
+                  )}
+                >
+                  <div className={cn(
+                    "w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0",
+                    shop?._id === shopItem._id
+                      ? "bg-[var(--primary)] text-white"
+                      : "bg-[var(--muted)]"
+                  )}>
+                    <Store className="w-6 h-6" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-bold text-[var(--foreground)] truncate">
+                      {shopItem.shopName}
+                    </h3>
+                    <p className="text-sm text-[var(--muted-foreground)] truncate">
+                      {shopItem.address.area}, {shopItem.address.city}
+                    </p>
+                    {shopItem.status === "pending" && (
+                      <span className="inline-block mt-1 px-2 py-0.5 bg-amber-100 text-amber-700 text-xs rounded-full">
+                        {t("orders.status.pending")}
+                      </span>
+                    )}
+                  </div>
+                  {shop?._id === shopItem._id && (
+                    <div className="w-6 h-6 bg-[var(--primary)] rounded-full flex items-center justify-center flex-shrink-0">
+                      <Check className="w-4 h-4 text-white" />
+                    </div>
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

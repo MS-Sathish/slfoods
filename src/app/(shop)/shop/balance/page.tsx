@@ -30,18 +30,20 @@ interface BalanceData {
 
 export default function BalancePage() {
   const t = useTranslations();
-  const token = useAuthStore((state) => state.token);
+  const { token, shop } = useAuthStore();
 
   const [data, setData] = useState<BalanceData | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchBalance();
-  }, []);
+    if (shop?._id) {
+      fetchBalance();
+    }
+  }, [shop?._id]);
 
   const fetchBalance = async () => {
     try {
-      const response = await fetch("/api/shop/balance", {
+      const response = await fetch(`/api/shop/balance?shopId=${shop?._id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

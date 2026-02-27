@@ -7,13 +7,16 @@ type UserType = "shop" | "admin" | null;
 interface AuthState {
   userType: UserType;
   shop: Shop | null;
+  shops: Shop[]; // All shops for this user
   admin: Admin | null;
   token: string | null;
   isAuthenticated: boolean;
 
-  setShopAuth: (shop: Shop, token: string) => void;
+  setShopAuth: (shop: Shop, token: string, allShops?: Shop[]) => void;
   setAdminAuth: (admin: Admin, token: string) => void;
   updateShop: (shop: Shop) => void;
+  setShops: (shops: Shop[]) => void;
+  switchShop: (shop: Shop) => void;
   logout: () => void;
 }
 
@@ -22,14 +25,16 @@ export const useAuthStore = create<AuthState>()(
     (set) => ({
       userType: null,
       shop: null,
+      shops: [],
       admin: null,
       token: null,
       isAuthenticated: false,
 
-      setShopAuth: (shop: Shop, token: string) => {
+      setShopAuth: (shop: Shop, token: string, allShops?: Shop[]) => {
         set({
           userType: "shop",
           shop,
+          shops: allShops || [shop],
           admin: null,
           token,
           isAuthenticated: true,
@@ -40,6 +45,7 @@ export const useAuthStore = create<AuthState>()(
         set({
           userType: "admin",
           shop: null,
+          shops: [],
           admin,
           token,
           isAuthenticated: true,
@@ -47,6 +53,18 @@ export const useAuthStore = create<AuthState>()(
       },
 
       updateShop: (shop: Shop) => {
+        set((state) => ({
+          shop,
+          // Also update the shop in the shops array
+          shops: state.shops.map((s) => (s._id === shop._id ? shop : s)),
+        }));
+      },
+
+      setShops: (shops: Shop[]) => {
+        set({ shops });
+      },
+
+      switchShop: (shop: Shop) => {
         set({ shop });
       },
 
@@ -54,6 +72,7 @@ export const useAuthStore = create<AuthState>()(
         set({
           userType: null,
           shop: null,
+          shops: [],
           admin: null,
           token: null,
           isAuthenticated: false,

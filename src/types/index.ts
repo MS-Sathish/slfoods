@@ -27,6 +27,7 @@ export interface Admin {
   _id: string;
   name: string;
   email: string;
+  mobile?: string;
   role: "owner" | "staff";
   createdAt: Date;
 }

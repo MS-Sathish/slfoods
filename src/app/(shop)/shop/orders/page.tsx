@@ -27,21 +27,25 @@ interface Order {
 
 export default function OrdersPage() {
   const t = useTranslations();
-  const token = useAuthStore((state) => state.token);
+  const { token, shop } = useAuthStore();
 
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<string>("all");
 
   useEffect(() => {
-    fetchOrders();
-  }, [filter]);
+    if (shop?._id) {
+      fetchOrders();
+    }
+  }, [filter, shop?._id]);
 
   const fetchOrders = async () => {
     try {
-      const url = filter === "all"
-        ? "/api/orders"
-        : `/api/orders?status=${filter}`;
+      const params = new URLSearchParams();
+      if (shop?._id) params.set("shopId", shop._id);
+      if (filter !== "all") params.set("status", filter);
+
+      const url = `/api/orders?${params.toString()}`;
 
       const response = await fetch(url, {
         headers: {

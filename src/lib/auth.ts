@@ -9,6 +9,7 @@ export const getAdminConfig = () => ({
   email: process.env.ADMIN_EMAIL || "admin@lakshmichips.com",
   password: process.env.ADMIN_PASSWORD || "admin123",
   name: process.env.ADMIN_NAME || "Admin",
+  mobile: process.env.ADMIN_MOBILE || "",
 });
 
 // Generate JWT token for shop
@@ -75,6 +76,7 @@ export function getAdminFromToken(token: string) {
     _id: "admin",
     name: adminConfig.name,
     email: adminConfig.email,
+    mobile: adminConfig.mobile,
     role: "owner" as const,
   };
 }

@@ -26,16 +26,33 @@ export async function GET(request: NextRequest) {
       );
     }
 
+    // Get shopId from query params or fallback to token's shop id
+    const { searchParams } = new URL(request.url);
+    const requestedShopId = searchParams.get("shopId") || payload.id;
+
+    // Verify the requested shop belongs to the same user (same email)
+    if (requestedShopId !== payload.id) {
+      const tokenShop = await Shop.findById(payload.id).select("email");
+      const requestedShop = await Shop.findById(requestedShopId).select("email");
+
+      if (!tokenShop || !requestedShop || tokenShop.email !== requestedShop.email) {
+        return NextResponse.json(
+          { success: false, error: "Access denied to this shop" },
+          { status: 403 }
+        );
+      }
+    }
+
     // Get all delivered orders
     const orders = await Order.find({
-      shop: payload.id,
+      shop: requestedShopId,
       status: "delivered",
     })
       .select("orderNumber totalAmount deliveredAt createdAt")
       .sort({ deliveredAt: -1 });
 
     // Get all payments
-    const payments = await Payment.find({ shop: payload.id })
+    const payments = await Payment.find({ shop: requestedShopId })
       .select("amount mode reference createdAt")
       .sort({ createdAt: -1 });
 
@@ -45,7 +62,7 @@ export async function GET(request: NextRequest) {
     const pendingBalance = totalOrdersAmount - totalPaymentsAmount;
 
     // Sync the calculated balance to shop model for consistency
-    await Shop.findByIdAndUpdate(payload.id, {
+    await Shop.findByIdAndUpdate(requestedShopId, {
       pendingBalance: Math.max(0, pendingBalance),
     });
 
