@@ -33,27 +33,44 @@ export async function POST(request: NextRequest) {
     }
 
     const normalizedEmail = email.toLowerCase().trim();
+    const normalizedShopName = shopName.trim();
 
     // Check if shops already exist with this email
     const existingShops = await Shop.find({ email: normalizedEmail }).select("+password");
 
-    // If email exists, verify password matches (for adding another shop)
+    // If email exists
     if (existingShops.length > 0) {
+      // First check if same shop name already exists (regardless of password)
+      const duplicateShop = existingShops.find(
+        s => s.shopName.toLowerCase().trim() === normalizedShopName.toLowerCase()
+      );
+
+      if (duplicateShop) {
+        if (duplicateShop.status === "pending") {
+          return NextResponse.json(
+            { success: false, error: "This shop is already registered and waiting for admin approval." },
+            { status: 400 }
+          );
+        }
+        if (duplicateShop.status === "approved") {
+          return NextResponse.json(
+            { success: false, error: "This shop is already registered. Please login instead." },
+            { status: 400 }
+          );
+        }
+        if (duplicateShop.status === "blocked") {
+          return NextResponse.json(
+            { success: false, error: "This shop has been blocked. Please contact admin." },
+            { status: 400 }
+          );
+        }
+      }
+
+      // Verify password matches (for adding a different shop with same email)
       const isMatch = await existingShops[0].comparePassword(password);
       if (!isMatch) {
         return NextResponse.json(
           { success: false, error: "Email already registered. Use correct password to add another shop." },
-          { status: 400 }
-        );
-      }
-
-      // Check if a shop with the same name already exists for this user
-      const duplicateShopName = existingShops.find(
-        s => s.shopName.toLowerCase() === shopName.toLowerCase()
-      );
-      if (duplicateShopName) {
-        return NextResponse.json(
-          { success: false, error: "You already have a shop with this name" },
           { status: 400 }
         );
       }
